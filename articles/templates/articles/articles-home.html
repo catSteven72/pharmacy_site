@@ -1,0 +1,39 @@
+{% extends "articles/articles-base.html" %}
+
+{% block title %} 
+  <head>
+    <title>Articles</title>
+  </head>
+{% endblock %}
+
+{% block content %}
+{% for article in articles %}
+  <body>
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+          <ul class="list-group shadow">
+              <li class="list-group-item">
+                  <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                      <div class="media-body order-2 order-lg-1">
+                          <h3><a class="mr-2" href="{% url 'articles-detail' article.id %}">{{article.title}}</a></h3>
+                            {% if article.picture %}
+                                <img src={{article.picture.url}} 
+                                alt="article placeholder image" 
+                                class="image-center" 
+                                width="50%"
+                                id="article_image">
+                            {% endif %}
+                          
+                          <div class="d-flex align-items-center justify-content-between mt-1">
+                              {{article.content | truncatewords:20}}
+                          </div>
+                      </div>
+                  </div>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+  {% endfor %}
+</body>
+{% endblock %}

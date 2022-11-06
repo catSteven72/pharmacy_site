@@ -1,0 +1,29 @@
+{% extends "main_site/main-site-base.html" %}
+
+{% block title %} 
+  <head>
+    <title>Search results</title>
+  </head>
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <center>
+        {% if searched %}
+            <h3>You searched for {{ searched }}</h3>
+            <br>
+            {% if products|length_is:"0" %}
+              <h3>Nothing found</h3>
+            {% else %}
+              {% for product in products %}
+              <a href="{% url 'product-detail' product.id %}">{{product.title}}</a>
+              <br>
+              {% endfor %}
+            {% endif %}
+        {% else %}
+            <h3>Enter the name of medicine you are looking for</h3>
+        {% endif %}
+    </center>
+</body>
+{% endblock %}

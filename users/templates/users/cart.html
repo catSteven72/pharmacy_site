@@ -1,0 +1,100 @@
+{% extends "main_site/main-site-base.html" %}
+{% load static %}
+{% block title %} <title>Cart</title> {% endblock %}
+
+{% block content %}
+<body>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <ul class="list-group shadow">
+                <li class="list-group-item">
+                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                        <div class="media-body order-2 order-lg-1">
+                            <a class="btn btn-outline-info" href="{% url 'shop-home' %}">&#x2190; Continue Shopping</a>
+                        </div>
+                        <br>
+                        <br>
+                        <table class="table">
+                            <tr>
+                                <div class="media-body order-2 order-lg-1">
+                                    <th><h5>Items: {{ order.get_cart_items }}</h5></th>
+                                    <th><h5>Total: €{{ order.get_cart_total|floatformat:2 }}</h5></th>
+                                    {% if order.get_cart_items > 0 %}
+                                    
+                                    <th>
+                                        <a 
+                                        style="float:right; margin:5px;" 
+                                        class="btn btn-success" 
+                                        href="{% url 'checkout' %}" 
+                                        id="checkout_btn">
+                                        Checkout
+                                        </a>
+                                    </th>
+                                    {% endif %}
+                                </div>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+
+            <br>
+        
+            {% for item in items %}
+            <ul class="list-group shadow">
+                <li class="list-group-item">
+                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                        <div class="media-body order-2 order-lg-1 cart-table-row">
+                            <table class="table cart-table" width="100%">
+                                <div class="flex-box">
+                                    <tr>
+                                        <div class="media-body order-2 order-lg-1">
+                                            <th>Item:</th>
+                                            <th>Price:</th>
+                                            <th>Quantity:</th>
+                                            <th>Total:</th>
+                                        </div>
+                                    </tr>
+                                    <tr>
+                                        <div class="media-body order-2 order-lg-1">
+                                            <td width="20%">{{ item.product.title }}</td>
+                                            
+                                            {% if item.product.price > item.product.discounted_price %} 
+                                                <td width="20%">
+                                                    <del>€{{item.product.price}}</del> 
+                                                    <ins style="color:red">€{{item.product.discounted_price|floatformat:2}}</ins>
+                                                </td>
+                                            {% else %}
+                                                <td width="20%">€{{item.product.price|floatformat:2}}</td>
+                                            {% endif %}
+                                            
+                                            <td width="20%">
+                                                <div class="row" id="item-quantity-div">
+                                                    {{ item.quantity }}
+                                                    <div class="col-auto">
+                                                        <div class="row" style="padding: 1px">
+                                                            <img data-product="{{item.product.id}}" data-action="add" class="chg_quantity update-cart" src="{% static 'up_arrow.png' %}" width="8" height="8">
+                                                        </div>
+                                                        <div class="row" style="padding: 1px">
+                                                            <img data-product="{{item.product.id}}" data-action="remove" class="chg_quantity update-cart" src="{% static 'down_arrow.png' %}" width="8" height="8">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td width="20%">€{{ item.get_total }}</td>
+                                        </div>
+                                    </tr>
+                                </div>
+                            </table>
+                            <button data-product="{{item.product.id}}" data-action="remove_all_item_pieces" class="btn btn-outline-danger update-cart">Remove</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+        
+    </div>
+    <script  src="{% static 'cart.js' %}"></script>
+</body>
+{% endblock %}

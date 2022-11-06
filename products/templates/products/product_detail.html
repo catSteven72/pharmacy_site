@@ -1,0 +1,76 @@
+{% extends "products/products-base.html" %}
+{% block content %}
+
+<head>
+  <title>Product</title>
+</head>
+<body>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <ul class="list-group shadow">
+                <li class="list-group-item">
+                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                        <div class="media-body order-2 order-lg-1">
+                            <h5 class="mt-0 font-weight-bold mb-2">
+                              {{object.title}}
+                              {% if user.profile.user_rights == 'admin' or user.profile.user_rights == 'employee' %}
+                              <a href="{% url 'product-delete' object.id %}">
+                                <button class="btn btn-primary float-end button" href="#" role="button" id="cart_btn">Delete product</button>
+                              </a>
+                              <a href="{% url 'product-update' object.id %}">
+                                <button class="btn btn-primary float-end button" href="#" role="button" id="cart_btn">Update product</button>
+                              </a>
+                            {% endif %}
+                            </h5>
+                            <br>
+                            <h6>{{object.get_category_display}}</h6>
+                            {% if object.get_brand_display != '' %} 
+                              <form method="POST" action="{% url 'shop-brand' '{{object.brand}}' %}" name="brand_search_form">
+                                {% csrf_token %}  
+                                <button 
+                                  type="submit"
+                                  class="btn btn-link"
+                                  name="brand_search" 
+                                  value="{{object.brand}}">
+                                  {{object.get_brand_display}}
+                                </button>
+                              </form>
+                            {% else %}
+                              <br>
+                            {% endif %}
+                            {% if object.picture %}
+                                <img src={{object.picture.url}} alt="product placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                            {% endif %}
+                            
+                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                <h6 class="font-weight-bold my-2">{% if object.price > object.discounted_price %} 
+                                    <del>{{object.price}}</del> <ins style="color:red">{{object.discounted_price}}</ins>
+                                    {% else %}
+                                        {{object.price}}
+                                    {% endif %}
+                                </h6>
+                            </div>
+                        </div>
+                        
+                        {% if object.number_in_stock == 0 %}
+                          <p>Out of stock</p>
+                        {% else %}
+                          <form method="POST">
+                            <input type="number" step="1" min="0" max="{{object.number_in_stock}}" value="0" name="medicine_qty" class="quantity-field">
+                            <button class="btn btn-outline-primary add" type="submit">Add To Cart</button>
+                          </form>
+                        {% endif %}
+                        
+                        <p>
+                            {{object.description}}
+                        </p>
+                        
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "shop/shop-base.html" %}
+{% block title %}
+{% load static %}
+<head>
+    <title>Shop</title>
+    
+</head>
+{% endblock %}
+{% block content %}
+<body>
+
+
+  {% for product in products %}
+  
+  <div class="row">
+      <div class="col-lg-8 mx-auto">
+          <ul class="list-group shadow">
+              <li class="list-group-item">
+                  <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                      <div class="media-body order-2 order-lg-1">
+                        <h5><a class="mr-2" href="{% url 'product-detail' product.id %}">{{product.title}}</a></h5>
+                          {% if product.get_brand_display != '' %} 
+                            <h5><a class="mr-2" href="{% url 'shop-brand' product.brand %}">{{product.get_brand_display}}</a></h5>
+                          {% else %}
+                            <br>
+                          {% endif %}
+                          {% if product.picture %}
+                              <img src={{product.picture.url}} alt="product placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                          {% endif %}
+                          
+                          <div class="d-flex align-items-center justify-content-between mt-1">
+                              <h6 class="font-weight-bold my-2">
+                                {% if product.price > product.discounted_price %} 
+                                  <del>{{product.price}}</del> 
+                                  <ins style="color:red">{{product.discounted_price}}</ins>
+                                {% else %}
+                                    {{product.price}}
+                                {% endif %}
+                              </h6>
+                          </div>
+                      </div>
+                      {% if product.number_in_stock == 0 %}
+                        <p>Out of stock</p>
+                      {% else %}
+                        <input type="number" step="1" min="0" max="{{product.number_in_stock}}" value="1" name="medicine_qty" class="quantity-field" id="product{{product.id}}-quantity">
+                        <button data-product={{product.id}} data-action="add" class="btn btn-outline-primary add-btn update-cart">Add To Cart</button>
+                      {% endif %}
+                      
+                  </div>
+              </li>
+          </ul>
+      </div>
+  </div>
+  
+  
+  {% endfor %}
+
+  <script  src="{% static 'cart.js' %}"></script>
+</body>
+
+{% endblock %}
+

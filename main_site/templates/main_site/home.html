@@ -1,0 +1,30 @@
+{% extends "main_site/main-site-base.html" %}
+
+{% block title %} 
+  <head>
+    <title>Pharmacy</title>
+  </head>
+{% endblock %}
+
+{% block content %}
+
+
+
+<body>
+
+    <div class="flex-box" id="home_row"> 
+          <div class="col-auto" id="buy_meds_col"> 
+            <a href="shop/"> 
+                <img src="static/buy_meds.png" alt="Logo" width="320" height="185" id="buy_meds_img">
+            </a>
+          </div>
+
+          <div class="col-auto" id="articles_col"> 
+            <a href="articles/"> 
+                <img src="static/articles.png" alt="Logo" width="320" height="185" id="articles_img">
+            </a>
+          </div>
+    </div>
+
+</body>
+{% endblock %}

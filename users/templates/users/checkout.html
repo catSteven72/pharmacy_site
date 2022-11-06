@@ -1,0 +1,130 @@
+{% extends "main_site/main-site-base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="box-element" id="form-wrapper">
+            <form id="shipping-info-form">
+                <ul class="list-group shadow">
+                    <li class="list-group-item">
+                        <div class="media align-items-lg-center flex-column flex-lg-row p-3" id="user-info">
+                    
+                            <div class="form-field">
+                                <label>First name</label>
+                                <input 
+                                required class="form-control" 
+                                type="text"
+                                placeholder="Name..."
+                                id="first-name-field"
+                                value="{{customer.first_name}}">
+                            </div>
+                            <div class="form-field">
+                                <label>Last name</label>
+                                <input 
+                                required class="form-control" 
+                                type="text"
+                                placeholder="Email..."
+                                id="last-name-field"
+                                value="{{customer.last_name}}">
+                            </div>
+                            <div class="form-field">
+                                <label>Email</label>
+                                <input 
+                                required class="form-control" 
+                                type="email"
+                                placeholder="Email..."
+                                id="email-field"
+                                value="{{customer.email}}">
+                            </div>
+                        
+                        </div>
+                        <hr>
+                        <p>Shipping Information:</p>
+                        
+                        <div class="form-field">
+                            <label>Street address</label>
+                            <input 
+                            required class="form-control" 
+                            type="text"
+                            placeholder="Address..."
+                            id="street-field"
+                            value="{{customer.street_address}}">
+                        </div>
+                        <div class="form-field">
+                            <label>City</label>
+                            <input 
+                            required class="form-control" 
+                            type="text"
+                            placeholder="City..."
+                            id="city-field"
+                            value="{{customer.city}}">
+                        </div>
+                        <div class="form-field">
+                            <label>Zip code</label>
+                            <input 
+                            required class="form-control" 
+                            type="text"
+                            placeholder="Zip code..."
+                            id="zip-field"
+                            value="{{customer.zip_code}}">
+                        </div>
+                        <div class="form-field">
+                            <label>Country</label>
+                            <input 
+                            required class="form-control" 
+                            type="text"
+                            placeholder="Country..."
+                            id="country-field"
+                            value="{{customer.country}}">
+                        </div>
+                        <input id="shipping-form-button" class="btn btn-success btn-block" type="submit" value="Continue to payment">
+                        <div class="box-element" id="payment-info" hidden>
+                            <small>Paypal Options</small>
+                            <button id="make-payment" class="btn btn-success">Make payment</button>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mx-auto">
+        <ul class="list-group shadow">
+            <li class="list-group-item">
+    
+                <div class="box-element">
+                    <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+                    <hr>
+                    <h3>Order Summary</h3>
+                    <hr>
+                    {% for item in items %}
+                    <div class="cart-row">
+                        <div style="flex:2"><p>Product: {{ item.product.title }}</p></div>
+                        {% if item.product.price > item.product.discounted_price %}
+                            <div style="flex:1">
+                                <del>€{{item.product.price}}</del> 
+                                <ins style="color:red">€{{item.product.discounted_price|floatformat:2}}</ins>
+                            </div>
+                        {% else %}
+                            <div style="flex:1"><p>€{{ item.product.price }}</p></div>
+                        {% endif %}
+                        <div style="flex:1"><p>Quantity: {{ item.quantity }}</p></div>
+                    </div>
+                    {% endfor %}
+                    <h5>Items: {{order.get_cart_items}}</h5>
+                    <h5>Total: €{{order.get_cart_total|floatformat:2}}</h5>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var shipping = '{{order.shipping}}'
+    var total = '{{order.get_cart_total|floatformat:2}}'
+</script>
+<script  src="{% static 'checkout.js' %}"></script>
+
+
+{% endblock %}

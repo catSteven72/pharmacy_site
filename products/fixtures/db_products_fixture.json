@@ -1,0 +1,17 @@
+[
+    {
+        "model": "products.Product",
+        "id": 1,
+        "fields":{
+            "title": "fuflomizin_xx",
+            "description": "lorem1",
+            "price": 20,
+            "discount_percent": 10,
+            "discounted_price": 18,
+            "picture": null,
+            "number_in_stock": 15,
+            "category": "flu",
+            "brand": "brand_1"
+        }
+    }
+]
