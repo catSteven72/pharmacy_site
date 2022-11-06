@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import MultipleObjectsReturned
 
 import json
 import datetime
@@ -11,7 +12,8 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import (
     Order,
     OrderItem,
-    ShippingAddress
+    ShippingAddress,
+    PreviousOrders
 )
 from products.models import Product
 
@@ -55,7 +57,11 @@ def profile(request):
 @login_required
 def cart(request):
     customer = request.user.profile
-    order, created = Order.objects.get_or_create(customer=customer)
+    try:
+        order, created = Order.objects.get_or_create(customer=customer)
+    except MultipleObjectsReturned:
+        order = Order.objects.filter(customer=customer).first()
+    
     items = order.orderitem_set.all()
     cart_items = order.get_cart_items
     
@@ -71,7 +77,12 @@ def cart(request):
 @login_required
 def checkout(request):
     customer = request.user.profile
-    order, created = Order.objects.get_or_create(customer=customer)
+
+    try:
+        order, created = Order.objects.get_or_create(customer=customer)
+    except MultipleObjectsReturned:
+        order = Order.objects.filter(customer=customer).first()
+    
     items = order.orderitem_set.all()
     
     context = {
@@ -89,9 +100,13 @@ def updateItem(request):
     action = data['action']
     qty = int(data['quantity'])
 
-    customer = request.user.profile.user_id
+    customer = request.user.profile
     product = Product.objects.get(id=productId)
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+    try:
+        order, created = Order.objects.get_or_create(customer=customer)
+    except MultipleObjectsReturned:
+        order = Order.objects.filter(customer=customer).first()
 
     orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
 
@@ -116,7 +131,11 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.profile
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+        try:
+            order, created = Order.objects.get_or_create(customer=customer)
+        except MultipleObjectsReturned:
+            order = Order.objects.filter(customer=customer).first()
 
         for field in data['shipping']:
             if data['shipping'][field] == 'None':
@@ -140,11 +159,22 @@ def processOrder(request):
             zip_code=data['shipping']['zip_code'],
             country=data['shipping']['country'],
         )
+    
+    print(data['product_id_qty']['1'])
 
-    products = [product for product in order.orderitem.product]
+    if order.complete == True:
+        for product_id in data['product_id_qty']:
+            product_object = Product.objects.get(id=product_id)
+            product_object.number_in_stock -= int(data['product_id_qty'][product_id])
+            product_object.save()
+
+        previous_order = PreviousOrders(
+            customer=customer,
+            order_date=order.order_date,
+            transaction_id=order.transaction_id,
+            complete=True)
+        previous_order.save()
 
     order.delete()
-    #todo: decrease product quantity in Product model
-    #create order copy for PreviousOrders model
 
     return JsonResponse('Payment complete', safe=False)

@@ -11,6 +11,11 @@
     })
 
     function submitFormData() {
+        let product_id_qty = {}
+        product_ids.forEach((id, index) => {
+            product_id_qty[id] = product_qtys[index]
+            })
+
         var shipping_info = {
             'first_name': document.getElementById("first-name-field").value,
             'last_name': document.getElementById("last-name-field").value,
@@ -29,7 +34,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken,
             },
-            body:JSON.stringify({'shipping':shipping_info})
+            body:JSON.stringify({'shipping':shipping_info, 'product_id_qty': product_id_qty})
         })
         .then((response) => 
             response.json())

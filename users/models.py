@@ -25,7 +25,7 @@ class UserProfile(models.Model):
         return f'{self.first_name, self.last_name}'
 
 class AbstractOrder(models.Model):
-    customer = models.OneToOneField(UserProfile, on_delete=models.SET_NULL, null=True)
+    customer = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100)
@@ -81,3 +81,11 @@ class ShippingAddress(models.Model):
 
 class PreviousOrders(AbstractOrder):
     customer = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+    
+    def __str__(self):
+        return str(self.transaction_id)
+
+    @classmethod
+    def create(cls, customer):
+        previous_order = cls(customer=customer)
+        return previous_order

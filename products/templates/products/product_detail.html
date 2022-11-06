@@ -21,21 +21,13 @@
                               <a href="{% url 'product-update' object.id %}">
                                 <button class="btn btn-primary float-end button" href="#" role="button" id="cart_btn">Update product</button>
                               </a>
+                              <p>Number in stock: {{object.number_in_stock}}</p>
                             {% endif %}
                             </h5>
                             <br>
                             <h6>{{object.get_category_display}}</h6>
                             {% if object.get_brand_display != '' %} 
-                              <form method="POST" action="{% url 'shop-brand' '{{object.brand}}' %}" name="brand_search_form">
-                                {% csrf_token %}  
-                                <button 
-                                  type="submit"
-                                  class="btn btn-link"
-                                  name="brand_search" 
-                                  value="{{object.brand}}">
-                                  {{object.get_brand_display}}
-                                </button>
-                              </form>
+                              <h6><a class="mr-2" href="{% url 'shop-brand' object.brand %}">{{product.get_brand_display}}</a></h6>
                             {% else %}
                               <br>
                             {% endif %}

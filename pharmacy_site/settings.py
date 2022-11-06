@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__)) #os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -126,14 +126,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "/static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR + "/static",
     BASE_DIR + '/shop/static/',
     BASE_DIR + '/main_site/static/',
     BASE_DIR + '/products/static/',
+    BASE_DIR + '/articles/static/',
 ]
+
 
 MEDIA_ROOT =  BASE_DIR + '/media'
 MEDIA_URL = '/media/'

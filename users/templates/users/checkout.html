@@ -2,6 +2,11 @@
 {% load static %}
 {% block content %}
 
+<script type="text/javascript">
+    var product_ids = []
+    var product_qtys = []
+</script>
+
 <div class="row">
     <div class="col-lg-6 mx-auto">
         <div class="box-element" id="form-wrapper">
@@ -111,9 +116,14 @@
                         {% endif %}
                         <div style="flex:1"><p>Quantity: {{ item.quantity }}</p></div>
                     </div>
+                    <script type="text/javascript">
+                        product_ids.push('{{item.product.id}}')
+                        product_qtys.push('{{item.quantity}}')
+                    </script>
                     {% endfor %}
                     <h5>Items: {{order.get_cart_items}}</h5>
                     <h5>Total: €{{order.get_cart_total|floatformat:2}}</h5>
+                    
                 </div>
             </li>
         </ul>

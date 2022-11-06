@@ -5,6 +5,9 @@
     <title>{{ object.title}}</title>
   </head>
 {% endblock %}
+{% load static %}
+
+<link type="text/css" rel="stylesheet" href="{% static 'articles/articles.css' %}">
 
 {% block content %}
     <div class="row">
@@ -35,7 +38,7 @@
                           {% endif %}
                           
                           <div class="d-flex align-items-center justify-content-between mt-1">
-                              {{object.content}}
+                            <p id="article-text">{{object.content}}</p>
                           </div>
                       </div>
                   </div>

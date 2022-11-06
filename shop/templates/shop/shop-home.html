@@ -20,7 +20,7 @@
                       <div class="media-body order-2 order-lg-1">
                         <h5><a class="mr-2" href="{% url 'product-detail' product.id %}">{{product.title}}</a></h5>
                           {% if product.get_brand_display != '' %} 
-                            <h5><a class="mr-2" href="{% url 'shop-brand' product.brand %}">{{product.get_brand_display}}</a></h5>
+                            <h6><a class="mr-2" href="{% url 'shop-brand' product.brand %}">{{product.get_brand_display}}</a></h6>
                           {% else %}
                             <br>
                           {% endif %}

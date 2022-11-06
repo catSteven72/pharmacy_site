@@ -142,13 +142,6 @@
     text-align: center;
 }
 
-/* .cart-table-row {
-    display:flex;
-    justify-content: space-between;
-    flex-wrap: wrap; 
-    justify-items: center;
-} */
-
 #item-quantity-div {
     display: flex;
     justify-content: center;
