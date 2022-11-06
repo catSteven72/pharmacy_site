@@ -159,8 +159,6 @@ def processOrder(request):
             zip_code=data['shipping']['zip_code'],
             country=data['shipping']['country'],
         )
-    
-    print(data['product_id_qty']['1'])
 
     if order.complete == True:
         for product_id in data['product_id_qty']:
